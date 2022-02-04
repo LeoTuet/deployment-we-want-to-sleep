@@ -32,7 +32,6 @@ services:
       - /usr/share/nginx/html:/usr/share/nginx/html
       - ./nginx.conf:/etc/nginx/nginx.conf
     deploy:
-      mode: global
       placement:
         constraints:
           - node.role == manager
