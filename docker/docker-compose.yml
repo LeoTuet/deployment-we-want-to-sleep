@@ -5,53 +5,60 @@ secrets:
     external: true
   MONGO_PASSWORD:
     external: true
+  MONGO_ROOT_USER:
+    external: true
+  MONGO_ROOT_PASSWORD:
+    external: true
 
 services:
-   wwts_website: 
-      image: ghcr.io/leotuet/ui-we-want-to-sleep:prod
-      restart: unless-stopped
+  wwts_website:
+    image: ghcr.io/leotuet/ui-we-want-to-sleep:prod
+    restart: unless-stopped
 
-   wwts_api: 
-      image: ghcr.io/leotuet/backend-we-want-to-sleep:prod
-      environment:
-         - NODE_ENV=production
-         - PORT=3000
-      secrets:
-        - MONGO_USER
-        - MONGO_PASSWORD
-      restart: unless-stopped
+  wwts_api:
+    image: ghcr.io/leotuet/backend-we-want-to-sleep:prod
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    secrets:
+      - MONGO_USER
+      - MONGO_PASSWORD
+    restart: unless-stopped
 
-   wwts_proxy:
-      image: wwts_proxy
-      ports:
-         - 80:80
-         - 443:443
-      volumes:
-         - ./data/certbot/conf:/etc/letsencrypt
-         - ./data/certbot/www:/var/www/certbot
-      command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-      restart: unless-stopped
+  wwts_proxy:
+    image: wwts_proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    restart: unless-stopped
 
-   wwts_db:
-      image: mongo
-      environment:
-         MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGO_ROOT_PASSWORD
-         MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/MONGO_ROOT_USER
-         MONGO_INITDB_DATABASE: admin
-         MONGO_DATABASE: wwts
-         MONGO_USERNAME_FILE: /run/secrets/MONGO_USER
-         MONGO_PASSWORD_FILE: /run/secrets/MONGO_PASSWORD
-      volumes:
-         - ./data/mongo-volume/wwts:/data/db
-         - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
-      secrets:
-         - mongo-root-passwd
-      restart: unless-stopped   
+  wwts_db:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGO_ROOT_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/MONGO_ROOT_USER
+      MONGO_INITDB_DATABASE: admin
+      MONGO_DATABASE: wwts
+      MONGO_USERNAME_FILE: /run/secrets/MONGO_USER
+      MONGO_PASSWORD_FILE: /run/secrets/MONGO_PASSWORD
+    volumes:
+      - ./data/mongo-volume/wwts:/data/db
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    secrets:
+      - MONGO_USER
+      - MONGO_PASSWORD
+      - MONGO_ROOT_USER
+      - MONGO_ROOT_PASSWORD
+    restart: unless-stopped
 
-   certbot:
-      image: certbot/certbot
-      volumes:
-         - ./data/certbot/conf:/etc/letsencrypt
-         - ./data/certbot/www:/var/www/certbot
-      entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-      restart: unless-stopped
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    restart: unless-stopped
