@@ -80,4 +80,4 @@ docker-compose run -w ../docker/ --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec -f ../docker/docker-compose.yml wwts_proxy wwts_proxy -s reload
+docker-compose exec wwts_proxy wwts_proxy -s reload -f ../docker/docker-compose.yml
