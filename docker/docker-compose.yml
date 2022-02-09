@@ -9,6 +9,8 @@ secrets:
     external: true
   MONGO_ROOT_PASSWORD:
     external: true
+  HCAPTCHA_SECRET:
+    external: true
 
 services:
   wwts_website:
@@ -23,6 +25,7 @@ services:
     secrets:
       - MONGO_USER
       - MONGO_PASSWORD
+      - HCAPTCHA_SECRET
     restart: unless-stopped
 
   wwts_nginx:
