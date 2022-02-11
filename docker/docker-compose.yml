@@ -11,6 +11,10 @@ secrets:
     external: true
   HCAPTCHA_SECRET:
     external: true
+  JWTPrivateKey:
+    external: true
+  JWTPublicKey:
+    external: true
 
 services:
   wwts_website:
