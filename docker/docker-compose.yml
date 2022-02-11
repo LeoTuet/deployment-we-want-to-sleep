@@ -9,6 +9,8 @@ secrets:
     external: true
   MONGO_ROOT_PASSWORD:
     external: true
+  MONGO_HOST:
+    external: true
   HCAPTCHA_SECRET:
     external: true
   JWTPrivateKey:
@@ -32,6 +34,7 @@ services:
       - HCAPTCHA_SECRET
       - JWTPrivateKey
       - JWTPublicKey
+      - MONGO_HOST
     restart: unless-stopped
 
   wwts_nginx:
