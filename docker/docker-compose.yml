@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
 
   wwts_nginx:
-    image: nginx:stable-alpine
+    image: macbre/nginx-brotli:latest
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html:/usr/share/nginx/html
