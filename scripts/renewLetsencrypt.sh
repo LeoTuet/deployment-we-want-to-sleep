@@ -1,6 +1,6 @@
 docker stack remove wwts-cluster
 
-sleep 2
+sleep 3
 
 docker run --rm \
   -p 443:443 -p 80:80 --name letsencrypt \
