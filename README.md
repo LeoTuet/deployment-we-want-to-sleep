@@ -30,8 +30,6 @@ For the Project to run succesfully the following Environment variables need to b
 - MONGO_HOST
 - JWTPrivateKey
 - JWTPublicKey
-- GRAFANA_USER
-- GRAFANA_PASSWORD
 
 To set them we use [Docker Swarm](https://docs.docker.com/engine/swarm/)
 

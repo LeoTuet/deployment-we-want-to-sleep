@@ -22,15 +22,16 @@ secrets:
   GRAFANA_PASSWORD:
     external: true
 
+volumes:
+  grafana_data:
+
 services:
   wwts_website:
     image: ghcr.io/leotuet/ui-we-want-to-sleep:prod
-    container_name: wwts_website
     restart: unless-stopped
 
   wwts_api:
     image: ghcr.io/leotuet/backend-we-want-to-sleep:prod
-    container_name: wwts_api
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -45,7 +46,6 @@ services:
 
   wwts_nginx:
     image: macbre/nginx-brotli:latest
-    container_name: wwts_nginx
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - /usr/share/nginx/html:/usr/share/nginx/html
@@ -60,7 +60,6 @@ services:
       - "443:443"
   wwts_db:
     image: mongo
-    container_name: wwts_db
     environment:
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/MONGO_ROOT_PASSWORD
       MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/MONGO_ROOT_USER
@@ -79,19 +78,11 @@ services:
     restart: unless-stopped
   wwts_grafana:
     image: grafana/grafana:6.7.2
-    container_name: wwts_grafana
     volumes:
+      - ./data/grafana-config/dashboards:/var/lib/grafana/dashboards
+      - ./data/grafana-config/datasources:/etc/grafana/datasources
+      - ./data/grafana-config/plugins:/var/lib/grafana/plugins
       - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
-    environment:
-      GF_SECURITY_ADMIN_USER: /run/secrets/GRAFANA_USER
-      GF_SECURITY_ADMIN_PASSWORD: /run/secrets/GRAFANA_PASSWORD
-      GF_USERS_ALLOW_SIGN_UP: false
-    secrets:
-      - GRAFANA_USER
-      - GRAFANA_PASSWORD
     restart: unless-stopped
-    expose:
-      - 3000
     labels:
       org.label-schema.group: "monitoring"   
