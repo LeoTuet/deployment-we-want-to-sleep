@@ -4,7 +4,7 @@ docker pull ghcr.io/leotuet/ui-we-want-to-sleep:prod
 docker service update --force wwts-cluster_wwts_api
 docker service update --force wwts-cluster_wwts_website
 
-## Depricated stuff
+## deprecated stuff
 
 # docker stack remove wwts-cluster
 
