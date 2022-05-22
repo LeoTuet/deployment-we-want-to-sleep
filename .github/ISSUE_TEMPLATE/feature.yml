@@ -1,7 +1,5 @@
 name: Feature Request
 description: Propose a new feature for WeWantToSleep
-title: "[Feature Request]: "
-labels: [feature request]
 body:
   - type: markdown
     attributes:
