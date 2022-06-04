@@ -77,7 +77,7 @@ services:
       - MONGO_ROOT_PASSWORD
     restart: unless-stopped
   wwts_grafana:
-    image: grafana/grafana:6.7.2
+    image: grafana/grafana:latest
     volumes:
       - ./data/grafana-config/dashboards:/var/lib/grafana/dashboards
       - ./data/grafana-config/datasources:/etc/grafana/datasources
