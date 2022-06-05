@@ -1,8 +1,10 @@
 docker pull ghcr.io/leotuet/backend-we-want-to-sleep:prod
 docker pull ghcr.io/leotuet/ui-we-want-to-sleep:prod
 
-docker service update --force wwts-cluster_wwts_api
-docker service update --force wwts-cluster_wwts_website
+sleep 1
+
+docker service update --force --image ghcr.io/leotuet/backend-we-want-to-sleep:prod wwts-cluster_wwts_api
+docker service update --force --image ghcr.io/leotuet/ui-we-want-to-sleep:prod wwts-cluster_wwts_website
 
 ## Depricated stuff
 
